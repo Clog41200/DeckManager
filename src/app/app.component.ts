@@ -45,8 +45,18 @@ export class AppComponent {
     });
   }
 
+  getCount(card: any) {
+    return this.mescartes.filter(carte => carte.id === card.id).length;
+  }
+
   ajouterCarte(card: any) {
     this.db.MesCartes.insert(card, (err, doc) => {
+      this.GetMyCards();
+    });
+  }
+
+  retirerCarte(card: any) {
+    this.db.MesCartes.remove({ _id: card._id }, () => {
       this.GetMyCards();
     });
   }

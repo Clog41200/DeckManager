@@ -1,35 +1,49 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" >
-  <input type="text" formControlName="motcle">
-  <input type="checkbox" formControlName="rouge"> Rouge
-  <input type="checkbox" formControlName="vert"> Vert
-  <input type="checkbox" formControlName="blanc"> Blanc
-  <input type="checkbox" formControlName="noir"> Noir
-  <input type="checkbox" formControlName="bleue"> Bleue
-  <input type="number" formControlName="manaCost"> Côut de mana
-  <br/>
-  <input type="checkbox" formControlName="Common"> Commune
-  <input type="checkbox" formControlName="Uncommon"> Unco
-  <input type="checkbox" formControlName="Rare"> Rare
-  <input type="checkbox" formControlName="MythicRare"> Rare mythique
-  <input type="checkbox" formControlName="Special"> Spéciale
-  <input type="checkbox" formControlName="BasicLand"> Terrain
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      formControlName="motcle"
+      placeholder="Recherche"
+    />
+  </mat-form-field>
+    <mat-checkbox matInput type="checkbox" formControlName="rouge" ></mat-checkbox>
+    Rouge
+  
+    <mat-checkbox matInput type="checkbox" formControlName="vert" ></mat-checkbox>
+    Vert
+  
+    <mat-checkbox matInput type="checkbox" formControlName="blanc" ></mat-checkbox>
+    Blanc
+  
+    <mat-checkbox matInput type="checkbox" formControlName="noir" ></mat-checkbox>
+    Noir
 
-  <button>Rechercher</button>
+    <mat-checkbox matInput type="checkbox" formControlName="bleue" ></mat-checkbox> Bleue
+    <input matInput type="number" formControlName="manaCost" > Côut de
+    mana
+  
+  <br />
+  <mat-checkbox matInput type="checkbox" formControlName="Common" ></mat-checkbox> Commune
+  <mat-checkbox matInput type="checkbox" formControlName="Uncommon" ></mat-checkbox> Unco
+  <mat-checkbox matInput type="checkbox" formControlName="Rare" ></mat-checkbox> Rare
+  <mat-checkbox matInput type="checkbox" formControlName="MythicRare" ></mat-checkbox> Rare mythique
+  <mat-checkbox matInput type="checkbox" formControlName="Special" ></mat-checkbox> Spéciale
+  <mat-checkbox matInput type="checkbox" formControlName="BasicLand" ></mat-checkbox> Terrain
+  <button mat-button>Rechercher</button>
 </form>
 
-<div style="display: flex;flex-direction: row">
-<div class="mescartes" style="min-width: 250px;max-width:250px">
-  <div  *ngFor="let result of mescartes" style="width:230px;height:350px;float:left;display: flex;flex-direction: column;align-items: center" >
-    <div>{{getFrenchName(result)}}</div>
-    <img [src]="getFrenchUrl(result)" [title]="result.text" (dblclick)="ajouterCarte(result)"/>
+<div style="display: flex;flex-direction: row;flex-wrap: wrap">
+  <div
+    class="carte"
+    *ngFor="let result of results"
+    style="display: flex;flex-direction: column;align-items: center"
+  >
+    <div>{{ getFrenchName(result) + "(" + getCount(result) + ")" }}</div>
+    <img
+      [src]="getFrenchUrl(result)"
+      [title]="result.text"
+      (dblclick)="ajouterCarte(result)"
+    />
   </div>
-
 </div>
-<div style="flex-grow: 1">
-  <div  *ngFor="let result of results" style="width:230px;height:350px;float:left;display: flex;flex-direction: column;align-items: center" >
-    <div>{{getFrenchName(result)}}</div>
-    <img [src]="getFrenchUrl(result)" [title]="result.text" (dblclick)="ajouterCarte(result)"/>
-  </div>
-</div>
-</div>
-

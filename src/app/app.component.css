@@ -1,0 +1,10 @@
+.carte{
+    width:150px;
+    height:auto;
+    margin:2px;
+}
+
+.carte img{
+    width:100%;
+    height:auto;
+}
