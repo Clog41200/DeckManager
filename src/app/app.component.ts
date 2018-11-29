@@ -1,7 +1,7 @@
 import { DatabaseService } from './database.service';
 import { Component, NgZone } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
@@ -14,18 +14,10 @@ export class AppComponent {
   public results: any[];
   public form = new FormGroup({
     motcle: new FormControl(''),
-    rouge: new FormControl(false),
-    vert: new FormControl(false),
-    bleue: new FormControl(false),
-    blanc: new FormControl(false),
-    noir: new FormControl(false),
-    manaCost: new FormControl(0),
-    Common: new FormControl(false),
-    Uncommon: new FormControl(false),
-    Rare: new FormControl(false),
-    MythicRare: new FormControl(false),
-    Special: new FormControl(false),
-    BasicLand: new FormControl(false)
+    colors: new FormControl([]),
+    rarity: new FormControl([]),
+    manaCost: new FormControl(''),
+    possedee: new FormControl(false)
   });
 
   constructor(
@@ -41,12 +33,10 @@ export class AppComponent {
     this.db.MesCartes.find({}, (err, docs) => {
       this.ngzone.run(() => {
         this.mescartes = docs;
+        this.updateCount();
+
       });
     });
-  }
-
-  getCount(card: any) {
-    return this.mescartes.filter(carte => carte.id === card.id).length;
   }
 
   ajouterCarte(card: any) {
@@ -63,55 +53,41 @@ export class AppComponent {
 
   onSubmit() {
     const recherche = this.form.value.motcle;
-    const couleurs = [];
-    const rarity = [];
-    if (this.form.value.rouge) {
-      couleurs.push('R');
+    const couleurs = this.form.value.colors;
+    const rarity = this.form.value.rarity;
+    console.log(this.form.value.colors);
+
+    let param = new HttpParams();
+    if (recherche !== '') {
+      param = param.append('name', recherche);
+      param = param.append('language', 'French');
     }
-    if (this.form.value.vert) {
-      couleurs.push('G');
-    }
-    if (this.form.value.noir) {
-      couleurs.push('B');
-    }
-    if (this.form.value.blanc) {
-      couleurs.push('W');
-    }
-    if (this.form.value.bleue) {
-      couleurs.push('U');
+    if (this.form.value.manaCost !== '') {
+      param = param.append('cmc', this.form.value.manaCost);
     }
 
-    if (this.form.value.Common) {
-      rarity.push('Common');
+    param = param.append('contains', 'imageUrl');
+    if (couleurs.length > 0) {
+      param = param.append('colorIdentity', couleurs);
     }
-    if (this.form.value.Uncommon) {
-      rarity.push('Uncommon');
-    }
-    if (this.form.value.Rare) {
-      rarity.push('Rare');
-    }
-    if (this.form.value.MythicRare) {
-      rarity.push('Mythic Rare');
-    }
-    if (this.form.value.Special) {
-      rarity.push('Special');
-    }
-    if (this.form.value.BasicLand) {
-      rarity.push('Basic Land');
+    if (rarity.length > 0) {
+      param = param.append('rarity', rarity);
     }
 
     this.httpclient
-      .get('https://api.magicthegathering.io/v1/cards', {
-        params: {
-          name: recherche,
-          language: 'French',
-          contains: 'imageUrl',
-          colorIdentity: couleurs,
-          cmc: this.form.value.manaCost,
-          rarity: rarity
-        }
+      .get<any>('https://api.magicthegathering.io/v1/cards', {
+        params: param
       })
-      .subscribe(resultat => (this.results = (resultat as any).cards));
+      .subscribe(resultat => {
+        this.results = resultat.cards;
+        this.updateCount();
+      });
+  }
+
+  updateCount() {
+    for (const carte of this.results) {
+      carte.combien = this.mescartes.filter(lacarte => lacarte.id === carte.id).length;
+    }
   }
 
   getFrenchName(card: any) {

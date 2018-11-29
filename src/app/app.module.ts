@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCheckboxModule, MatButtonModule, MatInputModule, MatFormFieldModule} from '@angular/material';
+import { MatCheckboxModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule} from '@angular/material';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +20,8 @@ import { MatCheckboxModule, MatButtonModule, MatInputModule, MatFormFieldModule}
     MatCheckboxModule,
     MatButtonModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [DatabaseService],
   bootstrap: [AppComponent]

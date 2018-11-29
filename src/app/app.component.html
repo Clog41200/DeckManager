@@ -1,49 +1,58 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-form-field>
-    <input
-      matInput
-      type="text"
-      formControlName="motcle"
-      placeholder="Recherche"
-    />
+    <input matInput type="text" formControlName="motcle" placeholder="Recherche" />
   </mat-form-field>
-    <mat-checkbox matInput type="checkbox" formControlName="rouge" ></mat-checkbox>
-    Rouge
-  
-    <mat-checkbox matInput type="checkbox" formControlName="vert" ></mat-checkbox>
-    Vert
-  
-    <mat-checkbox matInput type="checkbox" formControlName="blanc" ></mat-checkbox>
-    Blanc
-  
-    <mat-checkbox matInput type="checkbox" formControlName="noir" ></mat-checkbox>
-    Noir
 
-    <mat-checkbox matInput type="checkbox" formControlName="bleue" ></mat-checkbox> Bleue
-    <input matInput type="number" formControlName="manaCost" > Côut de
-    mana
-  
-  <br />
-  <mat-checkbox matInput type="checkbox" formControlName="Common" ></mat-checkbox> Commune
-  <mat-checkbox matInput type="checkbox" formControlName="Uncommon" ></mat-checkbox> Unco
-  <mat-checkbox matInput type="checkbox" formControlName="Rare" ></mat-checkbox> Rare
-  <mat-checkbox matInput type="checkbox" formControlName="MythicRare" ></mat-checkbox> Rare mythique
-  <mat-checkbox matInput type="checkbox" formControlName="Special" ></mat-checkbox> Spéciale
-  <mat-checkbox matInput type="checkbox" formControlName="BasicLand" ></mat-checkbox> Terrain
+
+  <mat-form-field>
+    <mat-select multiple formControlName="colors" placeholder="Couleur">
+      <mat-option value="R">Rouge</mat-option>
+      <mat-option value="G">Vert</mat-option>
+      <mat-option value="W">Blanc</mat-option>
+      <mat-option value="B">Noir</mat-option>
+      <mat-option value="U">Bleue</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select formControlName="manaCost" placeholder="Coût de mana">
+      <mat-option value="">Tous</mat-option>
+      <mat-option value="0">0</mat-option>
+      <mat-option value="1">1</mat-option>
+      <mat-option value="2">2</mat-option>
+      <mat-option value="3">3</mat-option>
+      <mat-option value="4">4</mat-option>
+      <mat-option value="5">5</mat-option>
+      <mat-option value="6">6</mat-option>
+      <mat-option value="7">7</mat-option>
+      <mat-option value="8">8</mat-option>
+      <mat-option value="9">9</mat-option>
+      <mat-option value="10">10</mat-option>
+      <mat-option value="11">11</mat-option>
+      <mat-option value="12">12</mat-option>
+      <mat-option value="13">13</mat-option>
+      <mat-option value="14">14</mat-option>
+      <mat-option value="15">15</mat-option>
+      <mat-option value="16">16</mat-option>
+      <mat-option value="17">17</mat-option>
+      <mat-option value="18">18</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select multiple formControlName="rarity" placeholder="Rareté">
+      <mat-option value="Common">Commune</mat-option>
+      <mat-option value="Uncommon">Unco</mat-option>
+      <mat-option value="Rare">Rare</mat-option>
+      <mat-option value="Mythic Rare">Rare mythique</mat-option>
+      <mat-option value="Special">Spéciale</mat-option>
+      <mat-option value="Basic Land">Terrain</mat-option>
+    </mat-select>
+  </mat-form-field>
   <button mat-button>Rechercher</button>
 </form>
 
 <div style="display: flex;flex-direction: row;flex-wrap: wrap">
-  <div
-    class="carte"
-    *ngFor="let result of results"
-    style="display: flex;flex-direction: column;align-items: center"
-  >
-    <div>{{ getFrenchName(result) + "(" + getCount(result) + ")" }}</div>
-    <img
-      [src]="getFrenchUrl(result)"
-      [title]="result.text"
-      (dblclick)="ajouterCarte(result)"
-    />
+  <div class="carte" *ngFor="let result of results" style="display: flex;flex-direction: column;align-items: center">
+    <div>{{ getFrenchName(result) + "(" + result.combien + ")" }}</div>
+    <img [src]="getFrenchUrl(result)" [title]="result.text" (dblclick)="ajouterCarte(result)" />
   </div>
 </div>
