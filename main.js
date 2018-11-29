@@ -1,4 +1,8 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
+const Datastore = require('nedb');
+
+const MesCartes = new Datastore({filename:'mescartes.db',autoload:true});
+const MesDecks = new Datastore({filename:'decks.db',autoload:true});
 
 // Gardez une reference globale de l'objet window, si vous ne le faites pas, la fenetre sera
 // fermee automatiquement quand l'objet JavaScript sera garbage collected.
@@ -22,6 +26,10 @@ function createWindow () {
     win = null
   })
 }
+
+global.MesCartes = MesCartes;
+global.MesDecks = MesDecks;
+
 
 // Cette méthode sera appelée quant Electron aura fini
 // de s'initialiser et sera prêt à créer des fenêtres de navigation.

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { Card } from 'mtgsdk-ts';
+import { DatabaseService } from './database.service';
+import { Component, NgZone } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public results: Card[];
+  public mescartes: any[];
+  public results: any[];
   public form = new FormGroup({
     motcle: new FormControl(''),
     rouge: new FormControl(false),
@@ -26,7 +28,28 @@ export class AppComponent {
     BasicLand: new FormControl(false)
   });
 
-  constructor(private httpclient: HttpClient) {}
+  constructor(
+    private httpclient: HttpClient,
+    private el: ElectronService,
+    private db: DatabaseService,
+    private ngzone: NgZone
+  ) {
+    this.GetMyCards();
+  }
+
+  GetMyCards() {
+    this.db.MesCartes.find({}, (err, docs) => {
+      this.ngzone.run(() => {
+        this.mescartes = docs;
+      });
+    });
+  }
+
+  ajouterCarte(card: any) {
+    this.db.MesCartes.insert(card, (err, doc) => {
+      this.GetMyCards();
+    });
+  }
 
   onSubmit() {
     const recherche = this.form.value.motcle;
@@ -81,7 +104,7 @@ export class AppComponent {
       .subscribe(resultat => (this.results = (resultat as any).cards));
   }
 
-  getFrenchName(card: Card) {
+  getFrenchName(card: any) {
     if (card.foreignNames) {
       const foreign = card.foreignNames.filter(
         foreign => foreign.language === 'French'
@@ -96,7 +119,7 @@ export class AppComponent {
     }
   }
 
-  getFrenchUrl(card: Card) {
+  getFrenchUrl(card: any) {
     if (card.foreignNames) {
       const foreign = card.foreignNames.filter(
         foreign => foreign.language === 'French'
